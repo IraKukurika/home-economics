@@ -1,0 +1,53 @@
+<div class="card">
+  <div class="card-header bordered">
+    <div class="header-block">
+      <h3 class="title">Add category</h3>
+    </div>
+  </div>
+  <div class="card-block">
+
+    <app-message *ngIf="message.text && message.text.length > 0"
+                 [showMessage]="message"
+                 (changeMessage)="message.text = $event">
+    </app-message>
+
+    <form [formGroup]="form" (submit)="onSubmit()">
+      <div class="form-group"
+           [ngClass]="{'has-error': isControlInvalid('name')}">
+        <label class="control-label" for="category-name">Enter name</label>
+        <input type="text"
+               id="category-name"
+               class="form-control"
+               formControlName="name">
+
+        <span class="form-help-text"
+              *ngIf="isControlInvalid('name')">
+          Category name cannot be empty.
+        </span>
+      </div>
+
+      <div class="form-group"
+           [ngClass]="{'has-error': isControlInvalid('capacity')}">
+        <label class="control-label" for="category-value">Enter a limit</label>
+        <input type="number"
+               id="category-value"
+               class="form-control"
+               formControlName="capacity">
+
+        <span class="form-help-text"
+              *ngIf="isControlInvalid('capacity')">
+            <span *ngIf="form.controls['capacity'].errors['required']">The field cannot be empty.</span>
+            <span *ngIf="form.controls['capacity'].errors['min']">
+              Value must be more than
+              {{form.controls['capacity'].errors['min']['min']}}.
+            </span>
+        </span>
+      </div>
+      <button type="submit"
+              class="btn btn-primary"
+              [disabled]="form.invalid">
+        Add
+      </button>
+    </form>
+  </div>
+</div>

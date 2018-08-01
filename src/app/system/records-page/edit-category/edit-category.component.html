@@ -1,0 +1,74 @@
+<div class="card">
+  <div class="card-header bordered">
+    <div class="header-block">
+      <h3 class="title">Edit category</h3>
+    </div>
+  </div>
+  <div class="card-block">
+
+    <app-message *ngIf="message.text && message.text.length > 0"
+                 [showMessage]="message"
+                 (changeMessage)="message.text = $event">
+    </app-message>
+
+    <form #form="ngForm" (submit)="onSubmit(form)">
+      <div class="form-group">
+        <label class="control-label" for="e-select-category">Select a category</label>
+        <select id="e-select-category"
+                class="form-control"
+                [(ngModel)]="currentCategoryId"
+                (change)="onCategoryChange()"
+                [ngModelOptions]="{standalone: true}">
+          <option *ngFor="let category of categories"
+                  [value]="category.id">
+            {{ category.name }}
+          </option>
+        </select>
+      </div>
+      <div class="form-group"
+           [ngClass]="{'has-error': name.invalid && name.touched}">
+        <label class="control-label" for="e-category-name">Enter name</label>
+        <input type="text"
+               id="e-category-name"
+               class="form-control"
+               name="name"
+               #name="ngModel"
+               required
+               [ngModel]="currentCategory.name"
+              >
+
+        <span class="form-help-text"
+              *ngIf="name.invalid && name.touched">
+          Category name cannot be empty.
+        </span>
+      </div>
+
+      <div class="form-group"
+           [ngClass]="{'has-error': capacity.invalid && capacity.touched}">
+        <label class="control-label" for="e-category-value">Enter a limit</label>
+        <input type="number"
+               id="e-category-value"
+               class="form-control"
+               name="capacity"
+               #capacity="ngModel"
+               required
+               min="1"
+               [ngModel]="currentCategory.capacity">
+
+        <span class="form-help-text"
+              *ngIf="capacity.invalid && capacity.touched">
+            <span *ngIf="capacity.errors['required']">The field cannot be empty.</span>
+            <span *ngIf="capacity.errors['min']">
+              Value must be more than
+              {{capacity.errors['min']['min']}}.
+            </span>
+        </span>
+      </div>
+      <button type="submit"
+              class="btn btn-primary"
+              [disabled]="form.invalid">
+        Edit
+      </button>
+    </form>
+  </div>
+</div>
